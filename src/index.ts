@@ -6,7 +6,25 @@ import tasks from './routes/tasks'
 const app = new Hono()
 
 app.use('*', cors({
-  origin: ['https://rnegic.github.io/trello', 'http://localhost:5173', 'http://localhost:3000'],
+  origin: (origin) => {
+    const allowedOrigins = [
+      'https://rnegic.github.io/trello', 
+      'https://rnegic.github.io',
+      'http://localhost:5173', 
+      'http://localhost:3000'
+    ];
+    
+    // Разрешить запросы без origin (например, из Postman)
+    if (!origin) return origin;
+    
+    // Проверить точные совпадения
+    if (allowedOrigins.includes(origin)) return origin;
+    
+    // Проверить Vercel домены
+    if (origin.match(/^https:\/\/.*\.vercel\.app$/)) return origin;
+    
+    return null;
+  },
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
@@ -39,10 +57,16 @@ app.onError((err, c) => {
   }, 500)
 })
 
-const port = 3000
-console.log(`Server is running on port ${port}`)
+// Экспорт для Vercel
+export default app.fetch
 
-serve({
-  fetch: app.fetch,
-  port
-})
+// Для локальной разработки
+if (require.main === module) {
+  const port = 3000
+  console.log(`Server is running on port ${port}`)
+  
+  serve({
+    fetch: app.fetch,
+    port
+  })
+}
