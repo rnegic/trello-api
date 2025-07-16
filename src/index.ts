@@ -6,7 +6,12 @@ import tasks from './routes/tasks'
 const app = new Hono()
 
 app.use('*', cors({
-  origin: '*',
+  origin: [
+    'https://rnegic.github.io',
+    'https://rnegic.github.io/trello', 
+    'http://localhost:5173', 
+    'http://localhost:3000'
+  ],
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: false,
