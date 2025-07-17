@@ -1,58 +1,36 @@
 import { Hono } from 'hono'
+import { handle } from 'hono/vercel'
 import { cors } from 'hono/cors'
-import tasks from './routes/tasks'
+import tasks from '../src/routes/tasks'
+
+export const config = {
+  runtime: 'edge'
+}
 
 const app = new Hono()
 
 app.use('*', cors({
-  origin: (origin) => {
-    console.log('CORS Origin:', origin)
-    const allowedOrigins = [
-      'https://rnegic.github.io',
-      'https://rnegic.github.io/trello',
-      'http://localhost:5173',
-      'http://localhost:3000'
-    ];
-    if (!origin) return origin;
-    if (allowedOrigins.includes(origin)) return origin;
-    if (origin.match(/^https:\/\/.*\.vercel\.app$/)) return origin;
-    return null;
-  },
+  origin: ['https://rnegic.github.io', 'http://localhost:5173'],
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  credentials: false,
+  exposeHeaders: ['Content-Length', 'X-Powered-By'],
 }))
 
 app.get('/debug', (c) => {
   return c.json({
-    origin: c.req.header('origin'),
-    userAgent: c.req.header('user-agent'),
-    method: c.req.method,
-    url: c.req.url,
-    headers: (() => {
-      const headersObj: Record<string, string> = {};
-      c.req.raw.headers.forEach((value, key) => {
-        headersObj[key] = value;
-      });
-      return headersObj;
-    })()
+    origin: c.req.header('origin') || 'no origin',
+    path: c.req.path,
+    method: c.req.method
   })
-})
-
-app.options('*', (c) => {
-  return new Response(null, { status: 204 })
 })
 
 app.get('/', (c) => {
   return c.json({
     message: 'Task Manager API',
-    version: '1.0.0',
-    endpoints: {
-      tasks: '/api/tasks'
-    }
+    version: '1.0.0'
   })
 })
 
 app.route('/api/tasks', tasks)
 
-export default app
+export default handle(app)
