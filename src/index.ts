@@ -1,15 +1,31 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
-import tasks from '../src/routes/tasks'
+import tasks from './routes/tasks'
 
 const app = new Hono()
 
 app.use('*', cors({
-  origin: ['https://rnegic.github.io', 'http://localhost:5173'],
+  origin: (origin) => {
+    console.log('CORS Origin:', origin)
+    const allowedOrigins = [
+      'https://rnegic.github.io',
+      'https://rnegic.github.io/trello',
+      'http://localhost:5173',
+      'http://localhost:3000'
+    ];
+    if (!origin) return origin;
+    if (allowedOrigins.includes(origin)) return origin;
+    if (origin.match(/^https:\/\/.*\.vercel\.app$/)) return origin;
+    return null;
+  },
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: false,
 }))
+
+app.options('*', (c) => {
+  return new Response(null, { status: 204 })
+})
 
 app.get('/', (c) => {
   return c.json({
