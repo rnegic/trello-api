@@ -23,6 +23,22 @@ app.use('*', cors({
   credentials: false,
 }))
 
+app.get('/debug', (c) => {
+  return c.json({
+    origin: c.req.header('origin'),
+    userAgent: c.req.header('user-agent'),
+    method: c.req.method,
+    url: c.req.url,
+    headers: (() => {
+      const headersObj: Record<string, string> = {};
+      c.req.raw.headers.forEach((value, key) => {
+        headersObj[key] = value;
+      });
+      return headersObj;
+    })()
+  })
+})
+
 app.options('*', (c) => {
   return new Response(null, { status: 204 })
 })
