@@ -1,7 +1,9 @@
+//for local development
+
 import { Hono } from 'hono'
 import { handle } from 'hono/vercel'
 import { cors } from 'hono/cors'
-import tasks from '../src/routes/tasks'
+import tasks from '../src/routes/tasks' 
 
 export const config = {
   runtime: 'edge'

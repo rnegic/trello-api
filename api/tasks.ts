@@ -1,13 +1,17 @@
 import { Hono } from 'hono';
-import { Task, CreateTaskRequest, UpdateTaskRequest, TaskStatus, TaskCategory, TaskPriority } from '../types';
+import { Task, CreateTaskRequest, UpdateTaskRequest, TaskStatus, TaskCategory, TaskPriority } from '../src/types';
 
 const tasks = new Hono();
 
+/**
+ * In-memory storage for tasks
+ * @type {Task[]} Array of task objects
+ */
 let tasksStorage: Task[] = [
   {
     id: '1',
-    title: 'Создать API для задач',
-    description: 'Разработать REST API с использованием Hono и Bun',
+    title: 'Create Task API',
+    description: 'Develop REST API using Hono and Bun',
     category: 'Feature',
     status: 'In Progress',
     priority: 'High',
@@ -16,8 +20,8 @@ let tasksStorage: Task[] = [
   },
   {
     id: '2',
-    title: 'Написать документацию',
-    description: 'Создать README с описанием API',
+    title: 'Write Documentation',
+    description: 'Create README with API description',
     category: 'Documentation',
     status: 'To Do',
     priority: 'Medium',
@@ -26,10 +30,19 @@ let tasksStorage: Task[] = [
   }
 ];
 
+/**
+ * Generate unique ID for new tasks
+ * @returns {string} Unique identifier
+ */
 function generateId(): string {
   return Date.now().toString() + Math.random().toString(36).substr(2, 9);
 }
 
+/**
+ * Validate task creation request
+ * @param {any} data - Request data to validate
+ * @returns {{ isValid: boolean; errors: string[] }} Validation result
+ */
 function validateCreateTask(data: any): { isValid: boolean; errors: string[] } {
   const errors: string[] = [];
   
@@ -59,6 +72,11 @@ function validateCreateTask(data: any): { isValid: boolean; errors: string[] } {
   return { isValid: errors.length === 0, errors };
 }
 
+/**
+ * Validate task update request
+ * @param {any} data - Request data to validate
+ * @returns {{ isValid: boolean; errors: string[] }} Validation result
+ */
 function validateUpdateTask(data: any): { isValid: boolean; errors: string[] } {
   const errors: string[] = [];
   
@@ -88,7 +106,7 @@ function validateUpdateTask(data: any): { isValid: boolean; errors: string[] } {
   return { isValid: errors.length === 0, errors };
 }
 
-// GET /api/tasks - получить все задачи с поиском по названию и дате
+// GET /tasks - получить все задачи с поиском по названию и дате
 tasks.get('/', (c) => {
   const { search, date } = c.req.query();
   let filteredTasks = [...tasksStorage];
@@ -120,7 +138,7 @@ tasks.get('/', (c) => {
   });
 });
 
-// GET /api/tasks/:id - получить задачу по ID
+// GET /tasks/:id - получить задачу по ID
 tasks.get('/:id', (c) => {
   const id = c.req.param('id');
   const task = tasksStorage.find(task => task.id === id);
@@ -138,7 +156,7 @@ tasks.get('/:id', (c) => {
   });
 });
 
-// POST /api/tasks
+// POST /tasks - создать новую задачу
 tasks.post('/', async (c) => {
   try {
     const body = await c.req.json();
@@ -179,7 +197,7 @@ tasks.post('/', async (c) => {
   }
 });
 
-// PATCH /api/tasks/:id - обновить задачу
+// PATCH /tasks/:id - обновить задачу
 tasks.patch('/:id', async (c) => {
   try {
     const id = c.req.param('id');
@@ -204,6 +222,7 @@ tasks.patch('/:id', async (c) => {
       }, 400);
     }
     
+    // Обновляем только переданные поля
     const updatedTask: Task = {
       ...tasksStorage[taskIndex],
       ...(body.title !== undefined && { title: body.title.trim() }),
@@ -229,7 +248,7 @@ tasks.patch('/:id', async (c) => {
   }
 });
 
-// DELETE /api/tasks/:id 
+// DELETE /tasks/:id - удалить задачу
 tasks.delete('/:id', (c) => {
   const id = c.req.param('id');
   const taskIndex = tasksStorage.findIndex(task => task.id === id);
