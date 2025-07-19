@@ -7,22 +7,22 @@ export type TaskPriority = 'Low' | 'Medium' | 'High';
  * @interface Task
  */
 export interface Task {
-  /** Unique identifier for the task */
-  id: string;
-  /** Task title/name */
-  title: string;
-  /** Optional task description */
-  description?: string;
-  /** Task category type */
-  category: TaskCategory;
-  /** Current task status */
-  status: TaskStatus;
-  /** Task priority level */
-  priority: TaskPriority;
-  /** Date when task was created */
-  createdAt: Date;
-  /** Date when task was last updated */
-  updatedAt: Date;
+    /** Unique identifier for the task */
+    id: string;
+    /** Task title/name */
+    title: string;
+    /** Optional task description */
+    description?: string;
+    /** Task category type */
+    category: TaskCategory;
+    /** Current task status */
+    status: TaskStatus;
+    /** Task priority level */
+    priority: TaskPriority;
+    /** Date when task was created */
+    createdAt: Date;
+    /** Date when task was last updated */
+    updatedAt: Date;
 }
 
 /**
@@ -30,16 +30,16 @@ export interface Task {
  * @interface CreateTaskRequest
  */
 export interface CreateTaskRequest {
-  /** Task title/name */
-  title: string;
-  /** Optional task description */
-  description?: string;
-  /** Task category type */
-  category: TaskCategory;
-  /** Initial task status (defaults to 'To Do') */
-  status?: TaskStatus;
-  /** Task priority level (defaults to 'Medium') */
-  priority?: TaskPriority;
+    /** Task title/name */
+    title: string;
+    /** Optional task description */
+    description?: string;
+    /** Task category type */
+    category: TaskCategory;
+    /** Initial task status (defaults to 'To Do') */
+    status?: TaskStatus;
+    /** Task priority level (defaults to 'Medium') */
+    priority?: TaskPriority;
 }
 
 /**
@@ -47,14 +47,14 @@ export interface CreateTaskRequest {
  * @interface UpdateTaskRequest
  */
 export interface UpdateTaskRequest {
-  /** Task title/name */
-  title?: string;
-  /** Optional task description */
-  description?: string;
-  /** Task category type */
-  category?: TaskCategory;
-  /** Current task status */
-  status?: TaskStatus;
-  /** Task priority level */
-  priority?: TaskPriority;
+    /** Task title/name */
+    title?: string;
+    /** Optional task description */
+    description?: string;
+    /** Task category type */
+    category?: TaskCategory;
+    /** Current task status */
+    status?: TaskStatus;
+    /** Task priority level */
+    priority?: TaskPriority;
 }

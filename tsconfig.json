@@ -1,7 +1,20 @@
 {
   "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "strict": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
-  }
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noImplicitAny": false,
+    "outDir": "./dist",
+    "rootDir": "./",
+    "declaration": true,
+    "sourceMap": true
+  },
+  "include": ["api/**/*", "src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
