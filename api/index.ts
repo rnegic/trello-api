@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { handle } from 'hono/vercel'
+// Use native Edge fetch handler
 import { cors } from 'hono/cors'
 
 export const config = {
@@ -14,11 +14,6 @@ app.use('*', cors({
     allowHeaders: ['Content-Type', 'Authorization'],
 }))
 
-app.options('*', cors({
-  origin: ['https://rnegic.github.io', 'http://localhost:5173'],
-  allowMethods: ['GET','POST','PATCH','DELETE','OPTIONS'],
-  allowHeaders: ['Content-Type','Authorization'],
-}))
 
 app.get('/', (c) => {
     return c.json({
@@ -43,4 +38,5 @@ app.get('/api/tasks', (c) => {
     })
 })
 
-export default handle(app)
+// Export Edge fetch handler
+export default app.fetch
