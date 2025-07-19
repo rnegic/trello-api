@@ -12,8 +12,8 @@ const app = new Hono()
 app.use('*', cors({
     origin: ['https://rnegic.github.io', 'http://localhost:5173'],
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    exposeHeaders: ['Content-Length', 'X-Powered-By'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+    credentials: false,
 }))
 
 app.get('/', (c) => {
@@ -21,7 +21,7 @@ app.get('/', (c) => {
         message: 'Task Manager API',
         version: '1.0.0',
         endpoints: {
-            tasks: '/tasks'
+            tasks: '/api/tasks'
         }
     })
 })

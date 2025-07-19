@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { Task, CreateTaskRequest, UpdateTaskRequest, TaskStatus, TaskCategory, TaskPriority } from '../src/types';
+import { Task, CreateTaskRequest, UpdateTaskRequest, TaskStatus, TaskCategory, TaskPriority } from './types';
 
 const tasks = new Hono();
 
@@ -35,7 +35,7 @@ let tasksStorage: Task[] = [
  * @returns {string} Unique identifier
  */
 function generateId(): string {
-  return Date.now().toString() + Math.random().toString(36).substr(2, 9);
+  return Date.now().toString() + Math.random().toString(36).substring(2, 11);
 }
 
 /**
