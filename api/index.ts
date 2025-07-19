@@ -1,7 +1,6 @@
 import { Hono } from 'hono'
 import { handle } from 'hono/vercel'
 import { cors } from 'hono/cors'
-import tasks from './tasks'
 
 export const config = {
     runtime: 'edge'
@@ -13,19 +12,29 @@ app.use('*', cors({
     origin: ['https://rnegic.github.io', 'http://localhost:5173'],
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowHeaders: ['Content-Type', 'Authorization'],
-    credentials: false,
 }))
 
 app.get('/', (c) => {
     return c.json({
         message: 'Task Manager API',
         version: '1.0.0',
-        endpoints: {
-            tasks: '/api/tasks'
-        }
+        status: 'working'
     })
 })
 
-app.route('/api/tasks', tasks)
+app.get('/debug', (c) => {
+    return c.json({
+        message: 'Debug endpoint works',
+        timestamp: new Date().toISOString()
+    })
+})
+
+app.get('/api/tasks', (c) => {
+    return c.json({
+        success: true,
+        data: [],
+        message: 'Tasks endpoint working'
+    })
+})
 
 export default handle(app)
